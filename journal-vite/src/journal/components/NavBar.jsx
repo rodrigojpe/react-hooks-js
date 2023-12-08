@@ -1,10 +1,23 @@
+import { useDispatch } from 'react-redux'
+import { startLogout } from '../../../store/auth/thunks';
 
-
-import { LoyaltyOutlined, MenuBookOutlined } from '@mui/icons-material'
+import { LogoutOutlined, MenuBookOutlined } from '@mui/icons-material'
 import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material'
 
 // eslint-disable-next-line react/prop-types
 export const NavBar = ( { drawerWidth } ) => {
+
+ 
+
+  const dispatch = useDispatch();
+
+  const onLogout = () => {
+    dispatch( startLogout() )
+  }
+
+
+
+
   return (
     <AppBar 
     position='fixed'
@@ -25,9 +38,10 @@ export const NavBar = ( { drawerWidth } ) => {
                   <Typography variant='h6' noWrap component='div'> lo </Typography>
                   <IconButton 
                   color='error'
+                  onClick={ onLogout }
                   >
                     
-                    <LoyaltyOutlined/>
+                    <LogoutOutlined/>
                   </IconButton>
             </Grid>
         </Toolbar>

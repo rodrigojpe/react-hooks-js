@@ -1,12 +1,13 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 
-import  { Button, Grid, Link, TextField, Typography} from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
+import  { Button, Grid, Link, TextField, Typography, Alert} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
-import { Google } from '@mui/icons-material'
-import { AuthLayout } from '../layout/AuthLayout'
-import { useForm } from '../../hooks/useForm'
-import { checkingAuthentication, startGoogleSignIn } from '../../../store/auth/thunks'
+import { Google } from '@mui/icons-material';
+import { AuthLayout } from '../layout/AuthLayout';
+import { useForm } from '../../hooks/useForm';
+import {  startGoogleSignIn, startLoginWithEmailPassword } from '../../../store/auth/thunks';
+import { useMemo } from 'react';
 
 
 
@@ -14,6 +15,10 @@ import { checkingAuthentication, startGoogleSignIn } from '../../../store/auth/t
 
 
 export const LoginPage = () => {
+
+
+  const {  status, errorMessage  } = useSelector( state => state.auth );
+
 
 const dispatch = useDispatch(); 
 
@@ -23,12 +28,15 @@ const dispatch = useDispatch();
 
   });
 
+  const isAuthenticate = useMemo(() => status === 'checking', [status] )
+
 
   const onSubmit = (event) => {
     event.preventDefault();
     console.log( { email, password } );
+    dispatch( startLoginWithEmailPassword({email, password}) )
 
-    dispatch( checkingAuthentication() )
+    // dispatch( checkingAuthentication() )
   }
 
 
@@ -41,7 +49,7 @@ const dispatch = useDispatch();
   return (
    
     <AuthLayout title='Login'>
-          <form onSubmit={ onSubmit }>
+          <form onSubmit={ onSubmit } className='animate__animated__fadeIn animate__faster'>
             <Grid container spacing={2}>
               <Grid item xs={12} sx={{mt:2}}>
                 <TextField label='Correo Electrónico' fullWidth
@@ -65,13 +73,32 @@ const dispatch = useDispatch();
                 /> 
               </Grid>
               <Grid container spacing={2} sx={{ mb: 2, mt:1 }}>
+
+              <Grid 
+                // eslint-disable-next-line no-extra-boolean-cast
+                display={ !!errorMessage ? '' : 'none' }
+                item 
+                xs={12}
+                >
+                  <Alert severity='error'> { errorMessage }</Alert>
+                </Grid>
+
+
                 <Grid item xs={12} sm={6}>
-                  <Button type='submit' variant='contained' fullWidth>
+                  <Button 
+                  disabled={ isAuthenticate }
+                  type='submit' 
+                  variant='contained' 
+                  fullWidth>
                     Login
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Button onClick={ onGoogleSingIn } variant='contained' fullWidth>
+                  <Button 
+                  disabled={ isAuthenticate }
+                  onClick={ onGoogleSingIn } 
+                  variant='contained' 
+                  fullWidth>
                     <Google/>
                     <Typography sx={{ ml:1}}> Google </Typography> 
                   </Button>

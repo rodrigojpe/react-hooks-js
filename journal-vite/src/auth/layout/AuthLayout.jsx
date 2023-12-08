@@ -6,6 +6,7 @@ import { Grid, Typography } from '@mui/material'
 export const AuthLayout = ({ children , title = ''}) => {
   return (
     <Grid
+    className='animate__animated__fadeIn animate__faster'
     container
     spacing={0}
     direction="column"
