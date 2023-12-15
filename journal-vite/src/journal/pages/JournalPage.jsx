@@ -3,8 +3,18 @@ import { JournalLayot } from '../layout/JournalLayot'
 import { NoteView } from '../views/NoteView'
 import { NothingSelectedView } from '../views/NothingSelectedView'
 import { AddOutlined } from '@mui/icons-material'
+import { useDispatch } from 'react-redux'; 
+import { startNewNote } from '../../../store/journal/thunks'
 
 export const JournalPage = () => {
+
+  const dispatch = useDispatch();
+
+  const onClickNewNote = () => {
+    dispatch( startNewNote() );
+  }
+
+
   return (
     <>
     <JournalLayot>
@@ -14,6 +24,7 @@ export const JournalPage = () => {
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ad architecto autem eaque deleniti numquam eos nostrum accusamus, cum voluptas nesciunt laudantium consequuntur laborum ea est corporis blanditiis quas, possimus itaque.</Typography> */}
 
         <IconButton
+        onClick={ onClickNewNote }
           size='large'
           sx={{
             color: 'white',
